@@ -6,11 +6,12 @@
 /*   By: kmorulan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/03 10:17:54 by kmorulan          #+#    #+#             */
-/*   Updated: 2019/07/03 10:41:05 by kmorulan         ###   ########.fr       */
+/*   Updated: 2019/07/04 07:23:30 by kmorulan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include "libft/libft.h"
 #include <fcntl.h>
 
 int		main(int argc, char **argv)
