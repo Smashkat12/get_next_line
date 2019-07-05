@@ -6,14 +6,14 @@
 /*   By: kmorulan <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/29 15:04:18 by kmorulan          #+#    #+#             */
-/*   Updated: 2019/07/03 11:22:48 by kmorulan         ###   ########.fr       */
+/*   Updated: 2019/07/05 16:31:02 by kmorulan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include "libft/libft.h"
 
-static t_list	*get_file_buffer(size_t fd, t_list **start)
+static t_list	*get_file_buf(size_t fd, t_list **start)
 {
 	t_list	*tmp;
 
@@ -31,39 +31,39 @@ static t_list	*get_file_buffer(size_t fd, t_list **start)
 
 static size_t	ft_endl_pos(const char *s)
 {
-	char	*c;
+	char	*i;
 
-	c = (char *)s;
-	while (*c && *c != '\n')
-		c++;
-	return (c - s);
+	i = (char *)s;
+	while (*i && *i != '\n')
+		i++;
+	return (i - s);
 }
 
 int				get_next_line(const int fd, char **line)
 {
-	char			l_b[BUFF_SIZE + 1];
+	char			line_b[BUFF_SIZE + 1];
 	size_t			bytes_read;
 	static t_list	*buffer_list;
-	t_list			*f_b;
+	t_list			*file_b;
 
-	CHECK_RETURN(fd < 0 || line == NULL || read(fd, l_b, 0) < 0, -1);
-	f_b = get_file_buffer(fd, &buffer_list);
-	if (!f_b->content)
-		f_b->content = ft_strnew(1);
-	while ((bytes_read = read(fd, l_b, BUFF_SIZE)))
+	CHECK_RETURN(fd < 0 || line == NULL || read(fd, line_b, 0) < 0, -1);
+	file_b = get_file_buf(fd, &buffer_list);
+	if (!file_b->content)
+		file_b->content = ft_strnew(1);
+	while ((bytes_read = read(fd, line_b, BUFF_SIZE)))
 	{
-		l_b[bytes_read] = 0;
-		ft_swapnfree(&f_b->content, ft_strjoin(f_b->content, l_b));
-		CHECK_RETURN(!f_b->content, -1);
-		if (ft_strchr(f_b->content, '\n'))
+		line_b[bytes_read] = 0;
+		ft_swapnfree(&file_b->content, ft_strjoin(file_b->content, line_b));
+		CHECK_RETURN(!file_b->content, -1);
+		if (ft_strchr(file_b->content, '\n'))
 			break ;
 	}
-	CHECK_RETURN(bytes_read < BUFF_SIZE && !*(char *)(f_b->content), 0);
-	*line = ft_strndup(f_b->content, ft_endl_pos(f_b->content));
-	if (ft_strlen(*line) < ft_strlen(f_b->content))
-		ft_swapnfree(&f_b->content,
-			ft_strdup(f_b->content + ft_strlen(*line) + 1));
+	CHECK_RETURN(bytes_read < BUFF_SIZE && !*(char *)(file_b->content), 0);
+	*line = ft_strndup(file_b->content, ft_endl_pos(file_b->content));
+	if (ft_strlen(*line) < ft_strlen(file_b->content))
+		ft_swapnfree(&file_b->content,
+			ft_strdup(file_b->content + ft_strlen(*line) + 1));
 	else
-		ft_strdel((char **)&f_b->content);
+		ft_strdel((char **)&file_b->content);
 	return (1);
 }
